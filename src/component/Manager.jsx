@@ -3,6 +3,7 @@ import { useRef } from 'react'
 
 const Manager = () => {
     const ref = useRef()
+    const passwordRef = useRef()
     const [form, setform] = useState({ site: "", username: "", password: "" })
     const [passwordArray, setpasswordArray] = useState([])
 
@@ -16,10 +17,13 @@ const Manager = () => {
 
 
     const showpassword = () => {
+        passwordRef.current.type="text"
         if (ref.current.src.includes("icons/eyecross.png")) {
+            passwordRef.current.type="text"
             ref.current.src = "icons/eye.png"
         }
         else {
+            passwordRef.current.type="password"
             ref.current.src = "icons/eyecross.png"
         }
     }
@@ -27,7 +31,7 @@ const Manager = () => {
 
     const savePassword = () => {
         setpasswordArray([...passwordArray, form])
-        localStorage.setItem("password", JSON.stringify([...passwordArray, form]))
+        localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]))
         console.log([...passwordArray, form])
     }
 
@@ -64,12 +68,10 @@ const Manager = () => {
 
                         <div className="relative">
 
-                            <input value={form.password} onChange={handleChange} placeholder='Enter Password' className='bg-white rounded-full text-black border w-full border-green-500 p-3 
-                            py-1 ' type="text" name='password' />
-
-
+                            <input ref={passwordRef} value={form.password} onChange={handleChange} placeholder='Enter Password' className='bg-white rounded-full text-black border w-full border-green-500 p-3 
+                            py-1 ' type="password" name='password' />
                             <span className='absolute right-[3px] top-[3px] cursor-pointer ' onClick={showpassword}>
-                                <img ref={ref} className='p-1' width={30} src="icons/eye.png" alt="eye" />
+                                <img ref={ref} className='p-1' width={30} src="icons/eyecross.png" alt="eye" />
                             </span>
                         </div>
                     </div>
