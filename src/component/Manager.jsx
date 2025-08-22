@@ -26,8 +26,8 @@ const Manager = () => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: "light",
-            
+            theme: "dark",
+
         });
         navigator.clipboard.writeText(text)
     }
@@ -48,14 +48,59 @@ const Manager = () => {
 
 
     const savePassword = () => {
-        setpasswordArray([...passwordArray, {...form,id: uuidv4()}])
-        localStorage.setItem("passwords", JSON.stringify([...passwordArray, {...form,id: uuidv4()}]))
-        console.log([...passwordArray, form])
+        if (form.site.length > 3 && form.username.length && form.password) {
+
+            setpasswordArray([...passwordArray, { ...form, id: uuidv4() }])
+            localStorage.setItem("passwords", JSON.stringify([...passwordArray, { ...form, id: uuidv4() }]))
+            setform({ site: "", username: "", password: "" })
+            console.log([...passwordArray, form])
+            toast('Password saved ', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+
+            });
+        }
+        else {
+            toast('Error: Password not saved', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+
+            });
+        }
     }
     const deletePassword = (id) => {
-        // setpasswordArray([...passwordArray, {...form,id: uuidv4()}])
-        // localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]))
-        // console.log([...passwordArray, for
+        let c = confirm("Do your really want to delete this password?")
+        if (c) {
+            setpasswordArray(passwordArray.filter(item => item.id !== id))
+            localStorage.setItem("passwords", JSON.stringify(passwordArray.filter(item => item.id !== id)))
+            toast('Password Deleted!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+
+            });
+        }
+    }
+    const editPassword = (id) => {
+        setform(passwordArray.filter(i => i.id === id)[0])
+        setpasswordArray(passwordArray.filter(item => item.id !== id))
     }
 
     const handleChange = (e) => {
@@ -77,12 +122,12 @@ const Manager = () => {
                 pauseOnFocusLoss
                 draggable
                 pauseOnHover
-                theme="light"
-                
-            />
-            <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"><div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-fuchsia-400 opacity-20 blur-[100px]"></div></div>
+                theme="dark"
 
-            <div className="   mycontainer">
+            />
+            <div className="absolute inset-0 -z-10 h-full w-full bg-green-50 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"><div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-fuchsia-400 opacity-20 blur-[100px]"></div></div>
+
+            <div className="   mycontainer  ">
                 <h1 className='text-3xl font-bold text-center' >
                     <span className='text-green-500'>&lt;</span>
                     Pass
@@ -123,7 +168,7 @@ const Manager = () => {
                 <div className="passwords">
                     <h2 className='font-bold text-2xl py-4 '  >Your Passwords</h2>
                     {passwordArray.length === 0 && <div>No Passwords to Show</div>}
-                    {passwordArray.length != 0 && <table className="table-auto w-full rounded-md  overflow-hidden">
+                    {passwordArray.length != 0 && <table className="table-auto w-full rounded-md  overflow-hidden mb-10">
                         <thead className='bg-green-700 text-white' >
                             <tr>
                                 <th className='py-2' >Site</th>
@@ -172,19 +217,19 @@ const Manager = () => {
                                             </div>
                                         </div>
                                     </td>
-                                    <td className=' border border-white py-2 text-center  ' >
+                                    <td className=' border border-white py-2 text-center ' onClick={() => { editPassword(item.id) }} >
                                         <span className='cursor-pointer mx-1 ' >
                                             <lord-icon
                                                 src="https://cdn.lordicon.com/gwlusjdu.json"
                                                 trigger="hover"
-                                                style={{"width":"25px", "height":"25px"}}>
+                                                style={{ "width": "25px", "height": "25px" }}>
                                             </lord-icon>
                                         </span>
-                                        <span className='cursor-pointer mx-1 ' >
+                                        <span className='cursor-pointer mx-1 ' onClick={() => { deletePassword(item.id) }} >
                                             <lord-icon
                                                 src="https://cdn.lordicon.com/skkahier.json"
                                                 trigger="hover"
-                                                style={{"width":"25px", "height":"25px"}}>
+                                                style={{ "width": "25px", "height": "25px" }}>
                                             </lord-icon>
                                         </span>
                                     </td>
